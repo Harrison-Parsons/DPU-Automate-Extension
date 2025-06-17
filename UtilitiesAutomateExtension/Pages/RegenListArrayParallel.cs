@@ -18,48 +18,48 @@ namespace UtilitiesAutomateExtension.Pages
         /// <summary>
         /// The list of people loaded after regeneration.
         /// </summary>
-        List<Person> people = new List<Person>();
+        private List<Person> people = new List<Person>();
 
         /// <summary>
         /// Provides environment-specific file paths and user information.
         /// </summary>
-        EnvDeclarations env = new EnvDeclarations();
+        private readonly EnvDeclarations env = new EnvDeclarations();
 
         /// <summary>
         /// The file path to the Outlook Address Book (OAB) file, initialized from <see cref="EnvDeclarations.oabFilePath"/>.
         /// </summary>
-        static string filePath = EnvDeclarations.oabFilePath;
+        private static readonly string filePath = EnvDeclarations.oabFilePath;
 
-        static int startLine = 11;
+        private static readonly int startLine = 11;
 
         /// <summary>
         /// The lines read from the OAB file, using the path from <see cref="EnvDeclarations.oabFilePath"/>.
         /// </summary>
-        static string[] strings = System.IO.File.ReadAllLines(EnvDeclarations.oabFilePath);
+        private static readonly string[] strings = File.ReadAllLines(EnvDeclarations.oabFilePath);
 
         /// <summary>
         /// The contents of the OAB file, joined as a single string.
         /// </summary>
-        public static string contents = String.Join(Environment.NewLine, strings, startLine, strings.Length - startLine);
+        public static readonly string contents = string.Join(Environment.NewLine, strings, startLine, strings.Length - startLine);
 
-        string pattern = "Microsoft Private MDB";
-        MatchCollection matches;
-        DateTime dateTime = DateTime.Now;
-        TimeSpan elapsed;
+        private readonly string pattern = "Microsoft Private MDB";
+        private MatchCollection matches;
+        private DateTime dateTime = DateTime.Now;
+        private TimeSpan elapsed;
 
         /// <summary>
         /// Gets or sets the name of the command.
         /// </summary>
-        String Name { get; set; }
+        private string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the icon path for the command.
         /// </summary>
-        String Icon { get; set; }
+        private string Icon { get; set; }
 
         // Log and contact queues and background writer tasks
-        private BlockingCollection<string> logQueue = new(10000);
-        private BlockingCollection<string> contactQueue = new(10000);
+        private readonly BlockingCollection<string> logQueue = new(10000);
+        private readonly BlockingCollection<string> contactQueue = new(10000);
         private Task logWriterTask;
         private Task contactWriterTask;
 
@@ -69,7 +69,6 @@ namespace UtilitiesAutomateExtension.Pages
         public RegenListArrayParallel()
         {
             Name = "Regen List Array Parallel";
-            //Icon = @"C:\Users\Par149\OneDrive - County of Henrico VA\Desktop\POwershell Scripting\faviconV2.png";
         }
 
         /// <summary>
@@ -78,14 +77,12 @@ namespace UtilitiesAutomateExtension.Pages
         /// </summary>
         public void Invoke()
         {
-            //MessageBox(0, "Regen List Array Parallel Invoked", "Regen List Array Parallel", 0x00001000);
-
             File.WriteAllText(EnvDeclarations.logsFilePath.Replace("ContactSearchLog.txt", "logs.csv"), string.Empty); // Clear log file
             File.WriteAllText(EnvDeclarations.contactBookFilePath, string.Empty); // Clear contact book file
 
             try
             {
-                Stopwatch stopwatch = Stopwatch.StartNew();
+                var stopwatch = Stopwatch.StartNew();
 
                 if (string.IsNullOrEmpty(contents) || string.IsNullOrEmpty(pattern))
                     throw new InvalidOperationException("Input data is missing.");
@@ -180,7 +177,7 @@ namespace UtilitiesAutomateExtension.Pages
                                     continue;
                                 }
 
-                                string fullName = string.Empty;
+                                string fullName;
                                 int commaIdx = nameRaw.IndexOf(",");
                                 if (commaIdx == -1)
                                 {
@@ -249,13 +246,11 @@ namespace UtilitiesAutomateExtension.Pages
                 MessageBox(0, $",,,Fatal error,,,{ex.Message}", "Error", 0x00001000);
                 throw;
             }
-            /// <summary>
-            /// Loads people from the contact book file using the path from <see cref="EnvDeclarations.contactBookFilePath"/>.
-            /// </summary>
+
+            // Load people from the contact book file
             people = ListGen.LoadPeopleFromContactBook(EnvDeclarations.contactBookFilePath);
 
-            Random random = new Random();
-
+            var random = new Random();
             int randInt = random.Next(0, people.Count);
             MessageBox(0, $"Count: {people[randInt]}", "Regen List Array Parallel", 0x00001000);
         }
@@ -266,12 +261,10 @@ namespace UtilitiesAutomateExtension.Pages
         /// <param name="toFind">The substring to find.</param>
         /// <param name="currIndex">The index to search backwards from.</param>
         /// <returns>The last index of the substring, or -1 if not found.</returns>
-        private static int backIndex(String toFind, int currIndex)
+        private static int backIndex(string toFind, int currIndex)
         {
-            int index = -1;
-            String contentsToSearch = contents.Substring(0, currIndex);
-            index = contentsToSearch.LastIndexOf(toFind);
-            return index;
+            string contentsToSearch = contents.Substring(0, currIndex);
+            return contentsToSearch.LastIndexOf(toFind);
         }
 
         /// <summary>

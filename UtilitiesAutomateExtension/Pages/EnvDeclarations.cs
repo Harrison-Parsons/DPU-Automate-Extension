@@ -9,6 +9,7 @@ namespace UtilitiesAutomateExtension.Pages
 {
     /// <summary>
     /// Provides environment-specific file paths and user information for the application.
+    /// All paths are constructed using system APIs for portability.
     /// </summary>
     internal class EnvDeclarations
     {

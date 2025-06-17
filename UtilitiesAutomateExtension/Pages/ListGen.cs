@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace UtilitiesAutomateExtension.Pages
 {
+    /// <summary>
+    /// Utility class for loading people from the contact book file.
+    /// </summary>
     internal class ListGen
     {
+        /// <summary>
+        /// Loads people from the specified contact book file.
+        /// </summary>
+        /// <param name="contactBookPath">The path to the contact book file.</param>
+        /// <returns>A list of <see cref="Person"/> objects.</returns>
         public static List<Person> LoadPeopleFromContactBook(string contactBookPath)
         {
             var people = new List<Person>();
