@@ -19,12 +19,29 @@ namespace UtilitiesAutomateExtension.Pages
         /// The list of people loaded after regeneration.
         /// </summary>
         List<Person> people = new List<Person>();
+
+        /// <summary>
+        /// Provides environment-specific file paths and user information.
+        /// </summary>
         EnvDeclarations env = new EnvDeclarations();
 
+        /// <summary>
+        /// The file path to the Outlook Address Book (OAB) file, initialized from <see cref="EnvDeclarations.oabFilePath"/>.
+        /// </summary>
         static string filePath = EnvDeclarations.oabFilePath;
+
         static int startLine = 11;
+
+        /// <summary>
+        /// The lines read from the OAB file, using the path from <see cref="EnvDeclarations.oabFilePath"/>.
+        /// </summary>
         static string[] strings = System.IO.File.ReadAllLines(EnvDeclarations.oabFilePath);
+
+        /// <summary>
+        /// The contents of the OAB file, joined as a single string.
+        /// </summary>
         public static string contents = String.Join(Environment.NewLine, strings, startLine, strings.Length - startLine);
+
         string pattern = "Microsoft Private MDB";
         MatchCollection matches;
         DateTime dateTime = DateTime.Now;
@@ -57,6 +74,7 @@ namespace UtilitiesAutomateExtension.Pages
 
         /// <summary>
         /// Invokes the parallel regeneration process, parsing the address book and writing contacts to file.
+        /// Uses <see cref="EnvDeclarations.logsFilePath"/> and <see cref="EnvDeclarations.contactBookFilePath"/> for output.
         /// </summary>
         public void Invoke()
         {
@@ -231,6 +249,9 @@ namespace UtilitiesAutomateExtension.Pages
                 MessageBox(0, $",,,Fatal error,,,{ex.Message}", "Error", 0x00001000);
                 throw;
             }
+            /// <summary>
+            /// Loads people from the contact book file using the path from <see cref="EnvDeclarations.contactBookFilePath"/>.
+            /// </summary>
             people = ListGen.LoadPeopleFromContactBook(EnvDeclarations.contactBookFilePath);
 
             Random random = new Random();

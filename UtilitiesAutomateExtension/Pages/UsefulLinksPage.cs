@@ -28,19 +28,19 @@ namespace UtilitiesAutomateExtension.Pages
             return [
                 new ListItem(hrms){
                     Title = "Time Card",
-                    Icon = new IconInfo(@"C:\Users\Par149\OneDrive - County of Henrico VA\Desktop\POwershell Scripting\faviconV2.png")
+                    Icon = new IconInfo("\uE8C7")
                 },
                 new ListItem(sharePoint){
                     Title = "SharePoint",
-                    Icon = new IconInfo(@"C:\Users\Par149\OneDrive - County of Henrico VA\Desktop\POwershell Scripting\6296669_microsoft_office_office365_sharepoint_icon.png")
+                    Icon = new IconInfo("\uF6FA")
                 },
                 new ListItem(tasks){
                     Title = "ToDo Tasks",
-                    Icon = new IconInfo(@"C:\Users\Par149\OneDrive - County of Henrico VA\Desktop\POwershell Scripting\logo.png")
+                    Icon = new IconInfo("\uE73E")
                 },
                 new ListItem(flowchart){
                     Title = "Draw.io",
-                    Icon = new IconInfo(@"C:\Users\Par149\OneDrive - County of Henrico VA\Desktop\POwershell Scripting\drawio.png")
+                    Icon = new IconInfo("\uEE56")
                 },
             ];
         }

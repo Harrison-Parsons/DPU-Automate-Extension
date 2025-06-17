@@ -17,9 +17,9 @@ public partial class UtilitiesAutomateExtensionCommandsProvider : CommandProvide
         ContactSearch contactSearch = new ContactSearch();
 
         DisplayName = "DPU Automation";
-        Icon = new IconInfo(@"C:\Users\Par149\OneDrive - County of Henrico VA\Desktop\POwershell Scripting\dpuPic.png");
+        Icon = new IconInfo("\uE99A");
         _commands = [
-            new CommandItem(new UtilitiesAutomateExtensionPage()) { Title = DisplayName, Icon = new IconInfo(@"C:\Users\Par149\OneDrive - County of Henrico VA\Desktop\POwershell Scripting\dpuPic.png"),},
+            new CommandItem(new UtilitiesAutomateExtensionPage()) { Title = DisplayName, Icon = new IconInfo("\uE99A"),},
             new CommandItem(new ContactSearch()) { Title = "Contact Search", Icon = new IconInfo("\ue716") },
         ];
     }

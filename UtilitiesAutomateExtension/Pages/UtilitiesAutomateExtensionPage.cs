@@ -23,18 +23,19 @@ internal sealed partial class UtilitiesAutomateExtensionPage : ListPage
 
     public override IListItem[] GetItems()
     {
-        var ps = new PSOpenCommand(@".\ContactSearchUTF8.ps1");
-        var email = new EmailOpenCommand("par149@henrico.gov");
+        //var ps = new PSOpenCommand(@".\ContactSearchUTF8.ps1");
+        //var email = new EmailOpenCommand("par149@henrico.gov");
         var parallelRegen = new RegenListArrayParallel();
         var ContactSearch = new ContactSearch();
 
         return [
             new ListItem(ContactSearch){
                 Title = "Contact Search",
-                Icon = new IconInfo(@"C:\Users\par149\OneDrive - County of Henrico VA\Desktop\POwershell Scripting\contact.png")
+                Icon = new IconInfo("\uEA8C")
             },
             new ListItem(new AnonymousCommand(action: ()=> {
                 parallelRegen.Invoke();
+                Icon = new IconInfo("\uE777");
             })),
             //new ListItem(ps){
             //    Title = "Contact Search"

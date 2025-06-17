@@ -1,6 +1,8 @@
 ﻿using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
+using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace UtilitiesAutomateExtension.Pages
 {
@@ -9,6 +11,7 @@ namespace UtilitiesAutomateExtension.Pages
     /// </summary>
     internal class ContactSearch : ListPage
     {
+
         /// <summary>
         /// The list of people loaded from the contact book.
         /// </summary>
@@ -35,7 +38,13 @@ namespace UtilitiesAutomateExtension.Pages
                 Icon = new IconInfo("\ue72c")
             }));
 
-            _people = ListGen.LoadPeopleFromContactBook(@"C:\Users\Par149\Documents\Logs\ContactBook.txt");
+            EnvDeclarations.EnsureDirectories();
+
+            /// <summary>
+            /// Loads people from the contact book file using the path from <see cref="EnvDeclarations.contactBookFilePath"/>.
+            /// </summary>
+            _people = ListGen.LoadPeopleFromContactBook(EnvDeclarations.contactBookFilePath);
+            //MessageBox(0,$"{EnvDeclarations.contactBookFilePath}", "Contact Book Path", 0x00000000);
         }
 
         /// <summary>
@@ -60,5 +69,11 @@ namespace UtilitiesAutomateExtension.Pages
             RaiseItemsChanged();
             this.IsLoading = false;
         }
+
+        /// <summary>
+        /// Displays a message box using the Win32 API.
+        /// </summary>
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
     }
 }
