@@ -4,7 +4,9 @@
 
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
+using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UtilitiesAutomateExtension.Pages;
 
 namespace UtilitiesAutomateExtension;
@@ -17,15 +19,12 @@ internal sealed partial class UtilitiesAutomateExtensionPage : ListPage
         Title = "DPU Automation";
         Name = "Open";
 
-        _items = [new IncrementingListItem(this) { Subtitle = $"Item 0" }];
-
     }
 
     public override IListItem[] GetItems()
     {
         var ps = new PSOpenCommand(@".\ContactSearchUTF8.ps1");
         var email = new EmailOpenCommand("par149@henrico.gov");
-        var regen = new RegenListArray();
         var parallelRegen = new RegenListArrayParallel();
         var ContactSearch = new ContactSearch();
 
@@ -56,12 +55,8 @@ internal sealed partial class UtilitiesAutomateExtensionPage : ListPage
             
         ];
     }
-
-    internal void Increment()
-    {
-        _items.Add(new IncrementingListItem(this) { Subtitle = $"Item {_items.Count}" });
-        RaiseItemsChanged();
-    }
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
 
     private List<ListItem> _items;
 }

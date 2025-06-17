@@ -19,12 +19,13 @@ namespace UtilitiesAutomateExtension.Pages
         /// The list of people loaded after regeneration.
         /// </summary>
         List<Person> people = new List<Person>();
+        EnvDeclarations env = new EnvDeclarations();
 
-        static String filePath = @"C:\Users\Par149\AppData\Local\Microsoft\Outlook\Offline Address Books\9f97379f-d3ed-41a0-a0c0-9f50ecc3f3e8\udetails.oab";
+        static string filePath = EnvDeclarations.oabFilePath;
         static int startLine = 11;
-        static string[] strings = System.IO.File.ReadAllLines(filePath);
-        public static String contents = String.Join(Environment.NewLine, strings, startLine, strings.Length - startLine);
-        String pattern = "Microsoft Private MDB";
+        static string[] strings = System.IO.File.ReadAllLines(EnvDeclarations.oabFilePath);
+        public static string contents = String.Join(Environment.NewLine, strings, startLine, strings.Length - startLine);
+        string pattern = "Microsoft Private MDB";
         MatchCollection matches;
         DateTime dateTime = DateTime.Now;
         TimeSpan elapsed;
@@ -51,7 +52,7 @@ namespace UtilitiesAutomateExtension.Pages
         public RegenListArrayParallel()
         {
             Name = "Regen List Array Parallel";
-            Icon = @"C:\Users\Par149\OneDrive - County of Henrico VA\Desktop\POwershell Scripting\faviconV2.png";
+            //Icon = @"C:\Users\Par149\OneDrive - County of Henrico VA\Desktop\POwershell Scripting\faviconV2.png";
         }
 
         /// <summary>
@@ -59,10 +60,10 @@ namespace UtilitiesAutomateExtension.Pages
         /// </summary>
         public void Invoke()
         {
-            MessageBox(0, "Regen List Array Parallel Invoked", "Regen List Array Parallel", 0x00001000);
+            //MessageBox(0, "Regen List Array Parallel Invoked", "Regen List Array Parallel", 0x00001000);
 
-            File.WriteAllText(@"C:\Users\Par149\Documents\Logs\logs.csv", string.Empty); // Clear log file
-            File.WriteAllText(@"C:\Users\Par149\Documents\Logs\ContactBook.txt", string.Empty); // Clear contact book file
+            File.WriteAllText(EnvDeclarations.logsFilePath.Replace("ContactSearchLog.txt", "logs.csv"), string.Empty); // Clear log file
+            File.WriteAllText(EnvDeclarations.contactBookFilePath, string.Empty); // Clear contact book file
 
             try
             {
@@ -80,7 +81,7 @@ namespace UtilitiesAutomateExtension.Pages
                 // Start background log writer
                 logWriterTask = Task.Run(() =>
                 {
-                    using var writer = new StreamWriter(@"C:\Users\Par149\Documents\Logs\logs.csv");
+                    using var writer = new StreamWriter(EnvDeclarations.logsFilePath.Replace("ContactSearchLog.txt", "logs.csv"));
                     writer.WriteLine("Index,Timestamp,Status,Email,FullName,PhoneNumber,Message");
                     foreach (var log in logQueue.GetConsumingEnumerable())
                         writer.WriteLine(log);
@@ -89,7 +90,7 @@ namespace UtilitiesAutomateExtension.Pages
                 // Start background contact writer
                 contactWriterTask = Task.Run(() =>
                 {
-                    using var writer = new StreamWriter(@"C:\Users\Par149\Documents\Logs\ContactBook.txt");
+                    using var writer = new StreamWriter(EnvDeclarations.contactBookFilePath);
                     foreach (var contact in contactQueue.GetConsumingEnumerable())
                         writer.WriteLine(contact);
                 });
@@ -215,7 +216,7 @@ namespace UtilitiesAutomateExtension.Pages
                 contactWriterTask.Wait();
 
                 // Sanitize ContactBook.txt to remove lines > 80 chars
-                string contactBookPath = @"C:\Users\Par149\Documents\Logs\ContactBook.txt";
+                string contactBookPath = EnvDeclarations.contactBookFilePath;
                 var sanitizedLines = File.ReadLines(contactBookPath)
                     .Where(line => line.Length <= 80)
                     .ToArray();
@@ -230,7 +231,7 @@ namespace UtilitiesAutomateExtension.Pages
                 MessageBox(0, $",,,Fatal error,,,{ex.Message}", "Error", 0x00001000);
                 throw;
             }
-            people = ListGen.LoadPeopleFromContactBook(@"C:\Users\Par149\Documents\Logs\ContactBook.txt");
+            people = ListGen.LoadPeopleFromContactBook(EnvDeclarations.contactBookFilePath);
 
             Random random = new Random();
 
