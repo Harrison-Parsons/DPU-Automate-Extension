@@ -10,9 +10,14 @@ using System.Threading.Tasks;
 
 namespace UtilitiesAutomateExtension.Pages
 {
+    /// <summary>
+    /// Command to regenerate the contact list from the Outlook address book using a parallelized approach.
+    /// </summary>
     public class RegenListArrayParallel
     {
-
+        /// <summary>
+        /// The list of people loaded after regeneration.
+        /// </summary>
         List<Person> people = new List<Person>();
 
         static String filePath = @"C:\Users\Par149\AppData\Local\Microsoft\Outlook\Offline Address Books\9f97379f-d3ed-41a0-a0c0-9f50ecc3f3e8\udetails.oab";
@@ -24,7 +29,14 @@ namespace UtilitiesAutomateExtension.Pages
         DateTime dateTime = DateTime.Now;
         TimeSpan elapsed;
 
+        /// <summary>
+        /// Gets or sets the name of the command.
+        /// </summary>
         String Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the icon path for the command.
+        /// </summary>
         String Icon { get; set; }
 
         // Log and contact queues and background writer tasks
@@ -33,12 +45,18 @@ namespace UtilitiesAutomateExtension.Pages
         private Task logWriterTask;
         private Task contactWriterTask;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegenListArrayParallel"/> class.
+        /// </summary>
         public RegenListArrayParallel()
         {
             Name = "Regen List Array Parallel";
             Icon = @"C:\Users\Par149\OneDrive - County of Henrico VA\Desktop\POwershell Scripting\faviconV2.png";
         }
 
+        /// <summary>
+        /// Invokes the parallel regeneration process, parsing the address book and writing contacts to file.
+        /// </summary>
         public void Invoke()
         {
             MessageBox(0, "Regen List Array Parallel Invoked", "Regen List Array Parallel", 0x00001000);
@@ -196,13 +214,12 @@ namespace UtilitiesAutomateExtension.Pages
                 logWriterTask.Wait();
                 contactWriterTask.Wait();
 
-                // --- Sanitize ContactBook.txt to remove lines > 80 chars ---
+                // Sanitize ContactBook.txt to remove lines > 80 chars
                 string contactBookPath = @"C:\Users\Par149\Documents\Logs\ContactBook.txt";
                 var sanitizedLines = File.ReadLines(contactBookPath)
                     .Where(line => line.Length <= 80)
                     .ToArray();
                 File.WriteAllLines(contactBookPath, sanitizedLines);
-                // ----------------------------------------------------------
 
                 stopwatch.Stop();
                 elapsed = stopwatch.Elapsed;
@@ -214,13 +231,19 @@ namespace UtilitiesAutomateExtension.Pages
                 throw;
             }
             people = ListGen.LoadPeopleFromContactBook(@"C:\Users\Par149\Documents\Logs\ContactBook.txt");
-            
+
             Random random = new Random();
 
             int randInt = random.Next(0, people.Count);
             MessageBox(0, $"Count: {people[randInt]}", "Regen List Array Parallel", 0x00001000);
         }
 
+        /// <summary>
+        /// Finds the last index of a substring before a given index in the contents.
+        /// </summary>
+        /// <param name="toFind">The substring to find.</param>
+        /// <param name="currIndex">The index to search backwards from.</param>
+        /// <returns>The last index of the substring, or -1 if not found.</returns>
         private static int backIndex(String toFind, int currIndex)
         {
             int index = -1;
@@ -229,6 +252,9 @@ namespace UtilitiesAutomateExtension.Pages
             return index;
         }
 
+        /// <summary>
+        /// Displays a message box using the Win32 API.
+        /// </summary>
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
     }

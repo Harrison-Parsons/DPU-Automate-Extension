@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 namespace UtilitiesAutomateExtension.Pages
 {
+    /// <summary>
+    /// Command to regenerate the contact list from the Outlook address book using a single-threaded approach.
+    /// </summary>
     public class RegenListArray : InvokableCommand
     {
         static String filePath = @"C:\Users\Par149\AppData\Local\Microsoft\Outlook\Offline Address Books\9f97379f-d3ed-41a0-a0c0-9f50ecc3f3e8\udetails.oab";
@@ -22,14 +25,24 @@ namespace UtilitiesAutomateExtension.Pages
 
         TimeSpan elapsed;
 
+        /// <summary>
+        /// Gets or sets the command result.
+        /// </summary>
         public CommandResult Result { get; set; } = CommandResult.KeepOpen();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegenListArray"/> class.
+        /// </summary>
         public RegenListArray()
         {
             Name = "Regen List Array";
             Icon = new IconInfo(@"C:\Users\Par149\OneDrive - County of Henrico VA\Desktop\POwershell Scripting\faviconV2.png");
         }
 
+        /// <summary>
+        /// Invokes the regeneration process, parsing the address book and writing contacts to file.
+        /// </summary>
+        /// <returns>The result of the command invocation.</returns>
         public override ICommandResult Invoke()
         {
             File.WriteAllText(@"C:\Users\Par149\Documents\Logs\logs.txt", string.Empty); // Clear log file
@@ -170,7 +183,7 @@ namespace UtilitiesAutomateExtension.Pages
                     contactWriter.Flush();
                     elapsed = stopwatch.Elapsed;
                 }
-                // --- Sanitize ContactBook.txt to remove lines > 80 chars ---
+                // Sanitize ContactBook.txt to remove lines > 80 chars
                 string contactBookPath = @"C:\Users\Par149\Documents\Logs\ContactBook.txt";
                 var allLines = File.ReadAllLines(contactBookPath);
                 var sanitizedLines = new List<string>();
@@ -180,7 +193,7 @@ namespace UtilitiesAutomateExtension.Pages
                         sanitizedLines.Add(line);
                 }
                 File.WriteAllLines(contactBookPath, sanitizedLines);
-                // ----------------------------------------------------------
+
                 MessageBox(0, $"Elapsed Time: {elapsed.TotalMilliseconds / 1000} s", "People Length", 0x00001000);
 
                 return Result;
@@ -192,6 +205,12 @@ namespace UtilitiesAutomateExtension.Pages
             }
         }
 
+        /// <summary>
+        /// Finds the last index of a substring before a given index in the contents.
+        /// </summary>
+        /// <param name="toFind">The substring to find.</param>
+        /// <param name="currIndex">The index to search backwards from.</param>
+        /// <returns>The last index of the substring, or -1 if not found.</returns>
         private static int backIndex(String toFind, int currIndex)
         {
             int index = -1;
@@ -200,6 +219,9 @@ namespace UtilitiesAutomateExtension.Pages
             return index;
         }
 
+        /// <summary>
+        /// Displays a message box using the Win32 API.
+        /// </summary>
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
     }
