@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "UtilitiesAutomateExtension (Package)": {
+      "commandName": "MsixPackage",
+      "doNotLaunchApp": true
+    },
+    "UtilitiesAutomateExtension (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
