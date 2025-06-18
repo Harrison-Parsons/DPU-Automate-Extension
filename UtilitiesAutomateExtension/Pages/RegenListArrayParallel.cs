@@ -82,7 +82,7 @@ namespace UtilitiesAutomateExtension.Pages
 
             try
             {
-                var stopwatch = Stopwatch.StartNew();
+                //var stopwatch = Stopwatch.StartNew();
 
                 if (string.IsNullOrEmpty(contents) || string.IsNullOrEmpty(pattern))
                     throw new InvalidOperationException("Input data is missing.");
@@ -237,9 +237,9 @@ namespace UtilitiesAutomateExtension.Pages
                     .ToArray();
                 File.WriteAllLines(contactBookPath, sanitizedLines);
 
-                stopwatch.Stop();
-                elapsed = stopwatch.Elapsed;
-                MessageBox(0, $"Elapsed Time: {elapsed.TotalMilliseconds / 1000} s", "People Length", 0x00001000);
+                //stopwatch.Stop();
+                //elapsed = stopwatch.Elapsed;
+                //MessageBox(0, $"Elapsed Time: {elapsed.TotalMilliseconds / 1000} s", "People Length", 0x00001000);
             }
             catch (Exception ex)
             {
@@ -250,9 +250,9 @@ namespace UtilitiesAutomateExtension.Pages
             // Load people from the contact book file
             people = ListGen.LoadPeopleFromContactBook(EnvDeclarations.contactBookFilePath);
 
-            var random = new Random();
-            int randInt = random.Next(0, people.Count);
-            MessageBox(0, $"Count: {people[randInt]}", "Regen List Array Parallel", 0x00001000);
+            //var random = new Random();
+            //int randInt = random.Next(0, people.Count);
+            //MessageBox(0, $"Count: {people[randInt]}", "Regen List Array Parallel", 0x00001000);
         }
 
         /// <summary>
