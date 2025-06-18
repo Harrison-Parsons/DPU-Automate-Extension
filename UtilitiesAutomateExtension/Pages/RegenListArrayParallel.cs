@@ -73,12 +73,25 @@ namespace UtilitiesAutomateExtension.Pages
 
         /// <summary>
         /// Invokes the parallel regeneration process, parsing the address book and writing contacts to file.
+        /// Ensures that the required directories and log files exist before performing file operations.
         /// Uses <see cref="EnvDeclarations.logsFilePath"/> and <see cref="EnvDeclarations.contactBookFilePath"/> for output.
         /// </summary>
         public void Invoke()
         {
-            File.WriteAllText(EnvDeclarations.logsFilePath.Replace("ContactSearchLog.txt", "logs.csv"), string.Empty); // Clear log file
-            File.WriteAllText(EnvDeclarations.contactBookFilePath, string.Empty); // Clear contact book file
+            // Ensure the directories for the log and contact book files exist.
+            EnvDeclarations.EnsureDirectories();
+
+            // Ensure the log file (logs.csv) exists; create it if it does not.
+            if (!File.Exists(EnvDeclarations.logsFilePath.Replace("ContactSearchLog.txt", "logs.csv")))
+                File.Create(EnvDeclarations.logsFilePath.Replace("ContactSearchLog.txt", "logs.csv")).Dispose();
+
+            // Ensure the contact book file exists; create it if it does not.
+            if (!File.Exists(EnvDeclarations.contactBookFilePath))
+                File.Create(EnvDeclarations.contactBookFilePath).Dispose();
+
+            // Clear the log and contact book files before writing new data.
+            File.WriteAllText(EnvDeclarations.logsFilePath.Replace("ContactSearchLog.txt", "logs.csv"), string.Empty);
+            File.WriteAllText(EnvDeclarations.contactBookFilePath, string.Empty);
 
             try
             {
