@@ -6,6 +6,7 @@ using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using UtilitiesAutomateExtension.Pages;
 
@@ -25,7 +26,7 @@ internal sealed partial class UtilitiesAutomateExtensionPage : ListPage
     {
         //var ps = new PSOpenCommand(@".\ContactSearchUTF8.ps1");
         //var email = new EmailOpenCommand("par149@henrico.gov");
-        var parallelRegen = new RegenListArrayParallel();
+        //var parallelRegen = new RegenListArrayParallel();
         var ContactSearch = new ContactSearch();
 
         return [
@@ -34,7 +35,7 @@ internal sealed partial class UtilitiesAutomateExtensionPage : ListPage
                 Icon = new IconInfo("\uEA8C")
             },
             new ListItem(new AnonymousCommand(action: ()=> {
-                parallelRegen.Invoke();
+                UpdateItems();
                 Icon = new IconInfo("\uE777");
             })),
             //new ListItem(ps){
@@ -56,6 +57,24 @@ internal sealed partial class UtilitiesAutomateExtensionPage : ListPage
             
         ];
     }
+
+    internal void UpdateItems()
+    {
+
+        var parallelRegen = new RegenListArrayParallel();
+
+        this.IsLoading = true;
+        Stopwatch stopwatch = Stopwatch.StartNew();
+
+        parallelRegen.Invoke();
+
+        stopwatch.Stop();
+        this.IsLoading = false;
+
+        var elapsedTime = stopwatch.ElapsedMilliseconds;
+        MessageBox(IntPtr.Zero, $"Regen completed in {elapsedTime/1000} s", "Regen List", 0x00000000 | 0x00001000 | 0x00000040);
+    }
+
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
 
