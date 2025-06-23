@@ -28,6 +28,8 @@ internal sealed partial class UtilitiesAutomateExtensionPage : ListPage
         //var email = new EmailOpenCommand("par149@henrico.gov");
         //var parallelRegen = new RegenListArrayParallel();
         var ContactSearch = new ContactSearch();
+        var openAddy = new OpenAddy("^(+(b))");
+        var openSearch = new OpenAddy("^(e)");
 
         return [
             new ListItem(ContactSearch){
@@ -38,6 +40,14 @@ internal sealed partial class UtilitiesAutomateExtensionPage : ListPage
                 UpdateItems();
                 Icon = new IconInfo("\uE777");
             })),
+            new ListItem(openAddy){
+                Title = "Open Addy",
+                Icon = new IconInfo("\uE715")
+            },
+            new ListItem(openSearch){
+                Title = "Open Search",
+                Icon = new IconInfo("\uE721")
+            },
             //new ListItem(ps){
             //    Title = "Contact Search"
             //},
